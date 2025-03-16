@@ -27,7 +27,7 @@ class Card {
 private:
     int point;
     std::map<Gem, int> cost;
-    Gem bonus; //type of Gem provide after bue
+    Gem bonus; //type of Gem provide after buy
     int level;
 public:
     Card(int p, std::map<Gem, int> c, Gem b, int lvl) {
@@ -59,6 +59,47 @@ public:
     }
 };
 
+class Player {
+private:
+    std::string name;
+    std::map<Gem, int> gems; //Gem own
+    std::vector<Card> ownedCards; //Purchased Card
+    std::vector<Card> reservedCards; //Pre-book Card
+    int points;
+public:
+    Player(std::string n) : name(n), points(0) {}
+
+    void addGem(Gem gem, int count) {
+        gems[gem] += count;
+    }
+    void buyCards(Card &card) {
+        ownedCards.push_back(card);
+        points += card.getPoint();
+    }
+    void reservedCard(Card &card) {
+        reservedCards.push_back(card);
+    }
+    int getPoints() {
+        return points;
+    }
+    void display() {
+        std::cout << "Player: " << name << ", Points: " << points << "\n";
+        std::cout << "Owned Gems: ";
+        for(auto &pair : gems) {
+            std::cout << "[" << gemTostring(pair.first) << ": " << pair.second << "] ";
+        }
+        std::cout << "\nOwned Cards: " << ownedCards.size() << "\n";
+        std::cout << "Reserved Cards: " << reservedCards.size() << "\n";
+    }
+};
+
+class GameManger {
+private:
+    std::vector<Player> players;
+    std::vector<Card> availableCards;
+
+public:
+};
 int main ()
 {
     std::cout << "Welcome" << std::endl;
@@ -70,5 +111,18 @@ int main ()
 
     Card card1(2, cost1, EMERALD, 2);
     card1.display();
+
+    Player player1("test");
+    player1.display();
+
+    player1.addGem(DIAMOND, 2);
+    player1.addGem(RUBY, 3);
+    player1.addGem(ONYX, 1);
+    std::cout << "\nAfter add gems\n";
+    player1.display();
+
+    player1.buyCards(card1);
+    std::cout << "\nAfter buy card\n";
+    player1.display();
     return 0;
 }
